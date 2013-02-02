@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en-US" class="fade">
+<!-- 
+  ^ You can control a few things with the <html> element's classes:
+
+  "fade"      - smooth fade between slides
+  "nonumbers" - remove the slide numbering after the progress bar
+-->
+
+<head>
+  <title>Current state and future of audio and video in Firefox</title>
+  <!-- 
+    ^ Don't forget a good title - they show up as bookmarks and in Google 
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1274, user-scalable=no">
+  <link rel="stylesheet" href="themes/mozilla/styles/style.css">
+  <style type="text/css">
+    /* Add your own styles here */
+  </style>
+</head>
+<body class="list">
+
+  <header class="caption"> Current state and future of audio and video in Firefox <h1></h1> <p class="footer">Paul Adenot, <a href="http://twitter.com/padenot">padenot</a> or <a href="mailto:">paul@paul.cx</a></p>
+  </header>
+
+<!-- 
+  The following is a slide, it needs a class of "slide" and it doesn't 
+  hurt to keep the right semantic elements in there, too.
+  IMPORTANT: each slide needs its own unique ID - this will become its
+  URL and this is how this slide system works!
+-->
+
+  <div id="cover" class="slide"><div>
+    <section>
+      <header>
+        <h2> Current state and future of audio and video in Firefox </h2>
+      </header>
+      <small class="byline">
+        Paul Adenot, Mozilla, FOSDEM'13, Brussels, 2013-02-03
+      </small>
+    <footer class="notes">
+    </footer>
+    </section>
+  </div></div>
+
+  <div id="summary" class="slide"><div>
+    <section>
+      <header>
+        <h2>What we will cover in this talk</h2>
+      </header>
+      <ul>
+        <li>What did we do in the media team this year?</li>
+        <li>What project is ongoing?</li>
+        <li>What can you expect in the (near or not too near) future?</li>
+      </ul>
+      <footer class="notes">
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="thisyear" class="slide"><div>
+    <section>
+      <header>
+        <h2>What did we do this year?</h2>
+      </header>
+      <ul>
+        <li> We added support for new codecs </li>
+        <li> We changed quite a few internal things that matters </li>
+        <li> We wrote new features </li>
+      </ul>
+      <footer class="notes">
+          Hardware decoders on mobile
+          Opus
+          Platform decoders
+
+          New audio backend
+          Massive cleaning
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="hwdecoding" class="slide"><div>
+    <section>
+      <header>
+        <h2>How do we decode video using hardware.</h2>
+      </header>
+      <ul>
+        <li>Software decoding on mobile ☹</li>
+        <li>But we have a chip that can decode video ☺</li>
+        <li>But the libraries are buggy ☹</li>
+        <li>But now it works ☺ (mostly)</li>
+      </ul>
+      <ul>
+        <li>H.264</li>
+        <li>VP8 is kind of planned (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=821524">Bug 821524</a>)</li>
+      </ul>
+      <footer class="notes">
+      Some devices have weird custom versions of the libraries, so it does not
+      work as well as it should.
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="platformdecoders" class="slide"><div>
+    <section>
+      <header>
+        <h2>Platform decoders</h2>
+      </header>
+      <p>Main goal: support H.264, AAC, mp3 without having to get a license,
+      because we lost <strong>this</strong> war.</p>
+      <ul>
+        <li>Windows Vista+: WMF (Windows Media Foundation)</li>
+        <li>Linux, Mac: GStreamer</li>
+        <li>Mac: Core Video</li>
+      </ul>
+
+      <ul>
+        <li>WMF: <code>media.windows-media-foundation.enabled: false</code></li>
+        <li>GStreamer: <code>ac_add_option --enable-gstreamer</code></li>
+        <li>Core Video: not yet implemented</li>
+      </ul>
+      <footer class="notes">
+      Some system decoders will hw accelerate the decoding.
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="opus" class="slide"><div>
+    <section>
+      <header>
+        <h2>A new audio codec, Opus</h2>
+      </header>
+      <img src="pictures/quality.svg" width=500 class="left" alt="Opus vs. other codecs">
+      <p>Written by Xiph.Org, standardized as RFC 6716, required for WebRTC.</p>
+      <footer class="notes">
+      Better that every other codecs for every application
+      Bit-rates from 6 kb/s to 510 kb/s
+      Sampling rates from 8 kHz (narrowband) to 48 kHz (fullband)
+      Frame sizes from 2.5 ms to 60 ms
+      Support for both constant bit-rate (CBR) and variable bit-rate (VBR)
+      Support for speech and music
+      Support for mono and stereo
+      Dynamically adjustable bitrate, audio bandwidth, and frame size
+      Good loss robustness and packet loss concealment (PLC)
+      Floating point and fixed-point implementation
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="platformdecoders-2" class="slide"><div>
+    <section>
+      <header>
+        <h2>Platform decoders: sites should work</h2>
+      </header>
+      <ul>
+      <li>Main problem: UA sniffing</li>
+      <li><code>HTMLVideoElement.canPlayType("video/mp4")</code>!</li>
+      <li>The fact that it returns <code>"maybe"</code>, <code>"probably"</code>
+      or <code>""</code> is not an excuse not to use the API</li>
+      </ul>
+      <footer class="notes">
+      A lot of the websites are UA sniffing and don't serve the h.264 version to
+      Firefox, please open evengelization bugs.
+
+      We are in contact with a couple of them, but long tail problem.
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="mp4" class="slide cover w"><div>
+    <section>
+    <video src="pictures/out.mp4" controls> </video>
+    </section>
+  </div></div>
+
+  <div id="codecleaning" class="slide"><div>
+    <section>
+      <header>
+        <h2>Massive code cleaning</h2>
+      </header>
+      <ul>
+        <li> Refactored massively <code>content/media</code>
+        <ul>
+          <li>Removed now useless class hierarchy</li>
+          <li>Clear interfaces, less strong-coupling</li>
+          <li>Removed unused code</li>
+        </ul>
+        </li>
+        <li> Prepare the code for others projects to plug in (WebRTC, WebAudio)</li>
+        <li> It was a bit of a mess sometimes, the code is much more approcheable now</li>
+      </ul>
+      <footer class="notes">
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="cubebbackend" class="slide"><div>
+    <section>
+      <header>
+        <h2>New audio backend library</h2>
+      </header>
+      <ul>
+        <li> Called libcubeb, not sure why </li>
+        <li> Written in C, straightforward to use in other projets <li>
+        <li> Abstract away CoreAudio, WinMM, Alsa, PulseAudio, AudioTrack,
+        sndio, OpenSL&hellip;</li>
+        <li> Pull-based (uses callbacks instead of blocking <code>write</code>), hence less threads needed </li>
+        <li> Opens the door for latency optimizations, needed for B2G, WebRTC, games</li>
+        <li> Needs a last backend to be able to remove the old Sydneyaudio library</li>
+      </ul>
+      <footer class="notes">
+      explain pull based vs.s.  push based
+
+      explain latency
+
+      The main problem is that this last backend is for android &lt; 2.2, and I
+      have to use JNI, and it's complicated.
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="cubebbackend-pic" class="slide cover w"><div>
+    <section style="background: none">
+      <header>
+      </header>
+      <img src="pictures/cubeb-arch.svg">
+      <footer class="notes">
+      explain pull based vs.s.  push based
+
+      explain latency
+
+      The main problem is that this last backend is for android &lt; 2.2, and I
+      have to use JNI, and it's complicated.
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="newfeatures" class="slide"><div>
+    <section>
+      <header>
+        <h2>New features</h2>
+      </header>
+      <ul>
+        <li>DASH (Dynamic Adaptative Streaming over HTTP)</li>
+        <li>Chained OGG support (at last!)</li>
+        <li><code>playbackRate</code> with pitch preservation</li>
+        <li>Metadata access in Javascript</li>
+        <li>Media sniffing for people that don't set <clode>Content-Type</clode></li>
+        <li>getUserMedia</li>
+        <li>MediaStream framework to handle and synchronize All The Things™</li>
+      </ul>
+      <footer class="notes">
+      </footer>
+    </section>
+  </div></div>
+
+  <!--<div id="getUserMedia" class="slide"><div>-->
+    <!--<section>-->
+      <!--<header>-->
+        <!--<h2>GetUserMedia</h2>-->
+      <!--</header>-->
+
+      <!--<script>-->
+      <!--</script>-->
+      <!--<video id=gum controls></video>-->
+      <!--<div style="width: 200px;" onclick="gumRun()">DEMO!</div>-->
+      <!--<footer class="notes">-->
+      <!--</footer>-->
+    <!--</section>-->
+  <!--</div></div>-->
+
+  <div id="ongoingproject" class="slide"><div>
+    <section>
+      <header>
+        <h2>Ongoing projects</h2>
+      </header>
+      <ul>
+        <li>WebAudio</li>
+        <li>MediaSource</li>
+        <li>WebVTT</li>
+        <li>(platform decoders)</li>
+      </ul>
+      <footer class="notes">
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="webaudio" class="slide"><div>
+    <section>
+      <header>
+        <h2>WebAudio</h2>
+      </header>
+      <ul>
+        <li>We lost at the spec game, and we now have to implement it</li>
+        <li>Underspecified to death, hard to implement</li>
+        <li>Behind a pref: <code>media.webaudio.enabled</code></li>
+        <li>A lot of DOM/refactoring work for now, nothing shiny to show</li>
+        <li>We are close to actually outputing sound!</li>
+      </ul>
+      <footer class="notes">
+      Basically intended to replace Audio Data API, which is obsolete
+
+      We had a proposal, but W3C chose Google's
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="webaudio-whatfor" class="slide"><div>
+    <section>
+      <header>
+        <h2>WebAudio: what for?</h2>
+      </header>
+      <ul>
+        <li>Basically, like <code>&lt;canvas&gt;</code>, but for audio</li>
+        <li>Games (spatial positionning of audio)</li>
+        <li>Rich audio applications (sampler, synthetizer)</li>
+        <li>Intended to be used with WebRTC, getUserMedia</li>
+        <li>Will probably be used to polyfill everything we don't have</li>
+      </ul>
+      <footer class="notes">
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="webaudio-picture" class="slide cover h"><div>
+    <section>
+      <header>
+      </header>
+        <img src="pictures/webaudio.png" alt="WebAudio example">
+      <footer class="notes">
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="mediasource" class="slide"><div>
+    <section>
+      <header>
+      <h2>MediaSource</h2>
+      </header>
+      <ul>
+        <li> Allows author to pass in <em>compressed</em> audio buffers using Javascript to a
+        media element </li>
+        <li> Needed to implement custom buffering strategy, protocols, for media </li>
+        <li> Usable to implement DRM stuff (☹) </li>
+        <li> Essential for the success of Shumway </li>
+        <li> Useful for massive hackery, very low-level </li>
+      </ul>
+      <footer class="notes">
+      A guy from netflix is editor of the spec.
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="webvtt" class="slide"><div>
+    <section>
+      <header>
+      <h2>WebVTT (Video Text Tracks)</h2>
+      </header>
+      <ul>
+        <li> Synchronized text tracks for media elements, e.g. subtitles for a video </li>
+        <li> Uses a format very close to the the popular <code>.srt</code> files</li>
+        <li> Written by David Humphrey's students, at Seneca College (Toronto),
+        with the help of Mozilla folks </li>
+      </ul>
+      <footer class="notes">
+      <li> The parser is a library written in C <li>
+      </footer>
+    </section>
+  </div></div>
+
+  <div id="thanks" class="slide"><div>
+    <section>
+      <header>
+        <h2>Questions, complaints?</h2>
+      </header>
+      <ul>
+        <li>Slides: <a href="//padenot.github.com/fosdem-13">
+          http://padenot.github.com/fosdem-13
+        </a></li>
+        <li> irc.mozilla.org #media </li>
+        <li> dev-media@lists.mozilla.org </li>
+      </ul>
+    <footer class="notes">
+    </footer>
+    </section>
+  </div></div>
+
+  <div class="progress"><div></div></div>
+  <!-- 
+    ^ don't like a progress bar? just delete this DIV
+  -->
+  <script src="scripts/script.js"></script>
+
+  <script>
+function gumRun() {
+  var v = document.querySelector("#gum");
+  v.controls = true;
+  console.log("hi");
+  navigator.mozGetUserMedia({video: true}, function(stream) {
+      console.log("yay");
+      v.mozSrcStream = stream;
+      v.play();
+    }, function(error) {
+      alert("Meh.");
+    });
+}
+  </script>
+  <!-- Copyright © 2010–2012 Vadim Makeev — pepelsbey.net -->
+</body>
+</html>
