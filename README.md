@@ -12,7 +12,14 @@ remotely interested by indie game, go watch it.
 It was used to demonstrate early prototype of h.264 decoding in Firefox. It
 probably won't work on your version of Firefox at the time of this writing.
 
-# What is the slidedeck
+# Where are the images from?
+
+The audio code comparison graph is from <http://www.opus-codec.org/comparison/>,
+modified so that colour-blind people can understand what it is about.
+
+All the other images have been made in Inkscape for this presentation.
+
+# What is the slidedeck?
 
 <http://github.com/codepo8/shower>, which is afaik a Mozilla template for
 another slide deck system.
@@ -23,5 +30,6 @@ Yup, <http://padenot.github.com/FOSDEM-13>.
 
 #What is the license
 
-CC0
+CC0 (for the images and text I made, that is, not for the audio codec comparison
+chart nor the video).
 
